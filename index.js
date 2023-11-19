@@ -29,11 +29,31 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const userCollection = client.db('sweethomeDB').collection('users');
+    const productCollection = client.db('sweethomeDB').collection('products');
+
+    //user routes
 
     app.post('/users',async(req,res)=>{
         const user = req.body;
         const result = await userCollection.insertOne(user);
         res.send(result);
+    })
+
+    //products route
+
+    app.post('/products',async(req,res)=>{
+      const product = req.body;
+      const result = productCollection.insertOne(product);
+      res.send(result);
+    })
+
+    app.get('/products',async(req,res)=>{
+      // const category = req.query.category;
+      // console.log(category)
+      // const query = { category : category }
+      const product = productCollection.find();
+      const result = await product.toArray();
+      res.send(result);
     })
     
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
